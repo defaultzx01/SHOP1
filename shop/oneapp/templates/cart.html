@@ -22,6 +22,12 @@
             <td>{{ item.final_price }} uah.</td>
         </tr>
     {% endfor %}
+        <tr>
+          <td colspan="2"></td>
+          <td>Summary:</td>
+          <td>{{ cart.total_products }}</td>
+          <td><strong>{{ cart.final_price }} uah.</strong></td>
+        </tr>
   </tbody>
 </table>
 
