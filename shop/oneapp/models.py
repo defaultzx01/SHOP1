@@ -109,6 +109,9 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+    def get_model_name(self):
+        return self.__class__.__name__.lower()
+
     def save(self, *args, **kwargs):
         image = self.image
         img = Image.open(image)
@@ -130,6 +133,7 @@ class Product(models.Model):
         #     filestream, 'ImageField', name, 'jpeg/image', sys.getsizeof(filestream), None
         # )
         super().save(*args, **kwargs)
+
 
 
 class Notebook(Product):
@@ -174,6 +178,7 @@ class Smartphones(Product):
     #         return 'Yes'
     #     return 'No'
 
+
 class CartProduct(models.Model):
 
     user = models.ForeignKey('Customer', verbose_name='Buyer', on_delete=models.CASCADE)
@@ -192,6 +197,7 @@ class CartProduct(models.Model):
         super().save(*args, **kwargs)
 
 
+
 class Cart(models.Model):
 
     owner = models.ForeignKey('Customer', null=True, verbose_name='Owner', on_delete=models.CASCADE)
@@ -206,13 +212,13 @@ class Cart(models.Model):
 
     def save(self, *args, **kwargs):
         cart_data = self.products.aggregate(models.Sum('final_price'), models.Count('id'))
-        print(cart_data)
         if cart_data.get('final_price__sum'):
             self.final_price = cart_data['final_price__sum']
         else:
             self.final_price = 0
         self.total_products = cart_data['id__count']
         super().save(*args, **kwargs)
+
 
 
 class Customer(models.Model):
